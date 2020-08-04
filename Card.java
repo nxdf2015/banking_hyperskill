@@ -30,7 +30,6 @@ public class Card {
     public  void create(){
         pin = generate(4);
         number = generate(9);
-        //System.out.println(number+"+++"+Luhn.checkSum(number));
 
         long checkSum = Luhn.checkSum(4 * (long)Math.pow(10,16) + number);
         number = Long.parseLong(number+""+checkSum);

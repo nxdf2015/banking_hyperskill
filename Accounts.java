@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Accounts {
     List<Card> numbers ;
@@ -82,4 +83,26 @@ public class Accounts {
     }
 
 
+    public void updateBalance(String number , long income) {
+        data.updateBalance(number , income);
+    }
+
+    public Account findById(String number){
+       long id =  Long.parseLong(number);
+       return account.get(id);
+    }
+
+    public void delete(String number) {
+
+        Card  card  = data.findById(number);
+        account.remove(Long.parseLong(number));
+        numbers.remove(card);
+        data.delete(number);
+    }
+
+    public boolean isValidNumber(String numberTransfer) {
+       return  numbers.stream().map(card -> card.getIdentifier())
+                .collect(Collectors.toList())
+                .contains(Long.parseLong(numberTransfer));
+    }
 }

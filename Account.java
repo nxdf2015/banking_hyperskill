@@ -20,4 +20,13 @@ public class Account {
                 "balance=" + balance +
                 '}';
     }
+
+    public void addIncome(long income) {
+        balance += income;
+
+    }
+
+    public boolean transferIsValid(long valueToTransfer) {
+        return balance >= valueToTransfer;
+    }
 }

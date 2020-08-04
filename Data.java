@@ -101,9 +101,9 @@ public class Data {
 
             Statement statement = connection.createStatement();
             String query = String.format("insert into card (number,pin,balance) values(%d,%d,%d)", number, pin,balance);
-            System.out.println("1---------------------------------");
+
             int v = statement.executeUpdate(query);
-            System.out.println("number insert ---------------------"+v);
+
             if (v == 1){
                 return true;
             }
@@ -114,4 +114,39 @@ public class Data {
     }
 
 
+    public boolean updateBalance(String number, long income) {
+        try(Connection connection = dataSource.getConnection()){
+            Statement statement = connection.createStatement();
+            String query = String.format("update card set balance = balance + %d where number = %s",income,number);
+            statement.executeUpdate(query);
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+    public Card findById(String number) {
+        try(Connection connection = dataSource.getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select number,pin from card where number ="+number);
+            return new Card(Long.parseLong(resultSet.getString(1)),Long.parseLong(resultSet.getString(2)));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean delete(String number) {
+
+
+        try(Connection connection = dataSource.getConnection()) {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("delete from card where number = "+number);
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
 }

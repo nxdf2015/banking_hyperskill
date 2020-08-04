@@ -40,19 +40,66 @@ public class Main {
 
                         do{
                             System.out.println("1. Balance\n" +
-                                    "2. Log out\n" +
-                                    "0. Exit\n");
+                                    "2. Add income\n" +
+                                    "3. Do transfer\n" +
+                                    "4. Close account\n" +
+                                    "5. Log out\n" +
+                                    "0. Exit");
                             choice = Integer.parseInt(scanner.nextLine());
                             switch (choice){
                                 case 1:
                                     System.out.println("Balance: "+account.getBalance());
                                     break;
                                 case 2:
+                                    System.out.println("Enter income");
+                                    long income = Long.parseLong(scanner.nextLine());
+                                    account.addIncome(income);
+                                    accounts.updateBalance(number,income);
+                                    break;
+                                case 3:
+                                    System.out.println("Transfer");
+                                    System.out.println("Enter card number:");
+                                    String numberTransfer = scanner.nextLine();
+
+                                    if (!Luhn.check(Long.parseLong(numberTransfer))){
+                                        System.out.println("Probably you made mistake in the card number. Please try again!");
+                                    }
+                                    else if (!accounts.isValidNumber(numberTransfer)) {
+                                        System.out.println("Such a card does not exist.");
+                                    }
+                                    else if(numberTransfer.equals(number)){
+                                        System.out.println("You can't transfer money to the same account!");
+                                    }
+                                    else  {
+                                        System.out.println("Enter how much money you want to transfer:");
+                                        long valueToTransfer = Long.parseLong(scanner.nextLine());
+                                        if (!account.transferIsValid(valueToTransfer)) {
+                                            System.out.println("Not enough money!");
+                                        }
+                                        else{
+                                            Account accountTransfer = accounts.findById(numberTransfer);
+                                            accountTransfer.addIncome(valueToTransfer);
+                                            account.addIncome(-valueToTransfer);
+                                            accounts.updateBalance(number,-valueToTransfer);
+                                            accounts.updateBalance(numberTransfer,valueToTransfer);
+                                            System.out.println("success!");
+                                        }
+                                    }
+
+
+
+
+                                    break;
+                                case 4:
+                                    accounts.delete(number);
+                                    System.out.println("The account has been closed!");
+                                    break;
+                                case 5:
                                 case 0:
                                     System.out.println("You hava successfully logged out!");
                                     break;
                             }
-                        }while(!(choice == 0 || choice == 2));
+                        }while(!(choice == 0 || choice == 5));
                     }
 
 
