@@ -8,7 +8,7 @@ import java.util.Map;
 public class Accounts {
     List<Card> numbers ;
     Map<Long,Account> account ;
-
+    Data data;
     private boolean log;
 
     public Accounts() {
@@ -16,13 +16,16 @@ public class Accounts {
         account = new HashMap<>();
     }
 
-    public void create() {
+    public void create() throws Exception {
         Card card = new Card();
         while(true){
             card.create();
             if (!numbers.contains(card)){
                 numbers.add(card);
                 account.put(card.getNumber(),new Account());
+                if(!data.save(card.getIdentifier(),card.pin,0)){
+                    throw new Exception("error base");
+                }
                 break;
             }
         }
@@ -64,4 +67,19 @@ public class Accounts {
 
 
     }
+
+    public void load(String nameDatabase) {
+        data = new Data(nameDatabase);
+        data.tableExist("card");
+        if((numbers = data.getCard())== null){
+            numbers = new ArrayList<>();
+        }
+
+        if((account = data.getAccount()) == null){
+            account = new HashMap<>();
+        }
+
+    }
+
+
 }

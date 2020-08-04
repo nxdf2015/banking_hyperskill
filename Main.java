@@ -1,13 +1,21 @@
 package banking;
 
+import org.sqlite.SQLiteDataSource;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
-             // System.out.println(Luhn.checkSum(400000424351057l));
+    public static void main(String[] args) throws Exception {
+
+        String nameDatabase = args[1];
+
+
         Scanner scanner = new Scanner(System.in);
         Accounts accounts = new Accounts();
+        accounts.load(nameDatabase);
         while(true){
             System.out.println("1. Create an account\n" +
                     "2. Log into account\n" +
@@ -55,6 +63,7 @@ public class Main {
             System.out.println();
 
         }
+
         System.out.println("Bye!");
 
     }
